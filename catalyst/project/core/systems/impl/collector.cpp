@@ -75,7 +75,7 @@ namespace systems {
 			if ( game_scene_node )
 			{
 				p.game_scene_node = game_scene_node;
-				p.bone_cache = g::memory.read<std::uintptr_t>( game_scene_node + SCHEMA( "CSkeletonInstance", "m_modelState"_hash ) + 0x80 );
+				p.bone_cache = g::memory.read<std::uintptr_t>( game_scene_node + SCHEMA( "CSkeletonInstance", "m_modelState"_hash ) + g::offsets.runtime.model_state_bone_cache );
 				p.origin = g::memory.read<math::vector3>( game_scene_node + SCHEMA( "CGameSceneNode", "m_vecAbsOrigin"_hash ) );
 
 				{
@@ -101,7 +101,7 @@ namespace systems {
 					p.weapon.ptr = systems::g_entities.lookup( active_weapon_handle );
 					if ( p.weapon.ptr )
 					{
-						p.weapon.vdata = g::memory.read<std::uintptr_t>( p.weapon.ptr + SCHEMA( "C_BaseEntity", "m_nSubclassID"_hash ) + 0x8 );
+						p.weapon.vdata = g::memory.read<std::uintptr_t>( p.weapon.ptr + SCHEMA( "C_BaseEntity", "m_nSubclassID"_hash ) + g::offsets.runtime.subclass_vdata );
 						if ( p.weapon.vdata )
 						{
 							p.weapon.ammo = g::memory.read<int>( p.weapon.ptr + SCHEMA( "C_BasePlayerWeapon", "m_iClip1"_hash ) );
@@ -183,7 +183,7 @@ namespace systems {
 			i.origin = g::memory.read<math::vector3>( game_scene_node + SCHEMA( "CGameSceneNode", "m_vecAbsOrigin"_hash ) );
 			i.ammo = g::memory.read<int>( entry.ptr + SCHEMA( "C_BasePlayerWeapon", "m_iClip1"_hash ) );
 
-			const auto weapon_vdata = g::memory.read<std::uintptr_t>( entry.ptr + SCHEMA( "C_BaseEntity", "m_nSubclassID"_hash ) + 0x8 );
+			const auto weapon_vdata = g::memory.read<std::uintptr_t>( entry.ptr + SCHEMA( "C_BaseEntity", "m_nSubclassID"_hash ) + g::offsets.runtime.subclass_vdata );
 			if ( weapon_vdata )
 			{
 				i.max_ammo = g::memory.read<int>( weapon_vdata + SCHEMA( "CBasePlayerWeaponVData", "m_iMaxClip1"_hash ) );
@@ -206,7 +206,7 @@ namespace systems {
 		std::vector<projectile> fresh{};
 		fresh.reserve( 32 );
 
-		const auto current_time = g::memory.read<float>( g::memory.read<std::uintptr_t>( g::offsets.global_vars ) + 0x30 );
+		const auto current_time = g::memory.read<float>( g::memory.read<std::uintptr_t>( g::offsets.global_vars ) + g::offsets.runtime.global_vars.current_time );
 
 		for ( const auto& entry : raw )
 		{
