@@ -20,7 +20,7 @@ namespace threads {
 				const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
 				if ( global_vars )
 				{
-					const auto map_ptr = g::memory.read<std::uintptr_t>( global_vars + 0x188 );
+					const auto map_ptr = g::memory.read<std::uintptr_t>( global_vars + g::offsets.runtime.global_vars.map_name );
 					const auto current_map = map_ptr ? g::memory.read_string( map_ptr ) : std::string{};
 
 					if ( !current_map.empty( ) && current_map != "<empty>" && current_map != last_map ) 
