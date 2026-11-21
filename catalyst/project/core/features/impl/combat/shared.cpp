@@ -437,7 +437,7 @@ namespace features::combat {
 		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
 		if ( global_vars )
 		{
-			ctx.current_time = g::memory.read<float>( global_vars + 0x30 );
+			ctx.current_time = g::memory.read<float>( global_vars + g::offsets.runtime.global_vars.current_time );
 		}
 
 		ctx.cycle_time = g::memory.read<float>( ctx.weapon_vdata + SCHEMA( "CCSWeaponBaseVData", "m_flCycleTime"_hash ) );
