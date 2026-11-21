@@ -10,8 +10,8 @@ namespace systems {
 			return 0;
 		}
 
-		const auto field_count = g::memory.read<std::int16_t>( class_info + 0x24 );
-		const auto fields_ptr = g::memory.read<std::uintptr_t>( class_info + 0x30 );
+		const auto field_count = g::memory.read<std::int16_t>( class_info + g::offsets.runtime.schema_system.field_count );
+		const auto fields_ptr = g::memory.read<std::uintptr_t>( class_info + g::offsets.runtime.schema_system.fields );
 
 		if ( field_count <= 0 || !fields_ptr )
 		{
@@ -20,7 +20,7 @@ namespace systems {
 
 		for ( std::int16_t i = 0; i < field_count; ++i )
 		{
-			const auto field_addr = fields_ptr + static_cast< std::size_t >( i ) * 0x20;
+			const auto field_addr = fields_ptr + static_cast< std::size_t >( i ) * g::offsets.runtime.schema_system.field_stride;
 			const auto name_ptr = g::memory.read<std::uintptr_t>( field_addr );
 
 			if ( !name_ptr )
@@ -33,7 +33,7 @@ namespace systems {
 
 			if ( fnv1a::runtime_hash( name ) == field_hash )
 			{
-				return g::memory.read< int >( field_addr + 0x10 );
+				return g::memory.read< int >( field_addr + g::offsets.runtime.schema_system.field_offset );
 			}
 		}
 
@@ -50,8 +50,8 @@ namespace systems {
 				return 0;
 			}
 
-			const auto scope_count = g::memory.read<int>( schema_system + 0x190 );
-			const auto scope_data = g::memory.read<std::uintptr_t>( schema_system + 0x198 );
+			const auto scope_count = g::memory.read<int>( schema_system + g::offsets.runtime.schema_system.scope_count );
+			const auto scope_data = g::memory.read<std::uintptr_t>( schema_system + g::offsets.runtime.schema_system.scope_data );
 
 			if ( !scope_count || scope_count > 64 || !scope_data )
 			{
@@ -67,7 +67,7 @@ namespace systems {
 				}
 
 				char scope_name[ 32 ]{};
-				g::memory.read( scope_ptr + 0x8, scope_name, sizeof( scope_name ) );
+				g::memory.read( scope_ptr + g::offsets.runtime.schema_system.scope_name, scope_name, sizeof( scope_name ) );
 
 				if ( std::strcmp( scope_name, "client.dll" ) == 0 )
 				{
@@ -85,41 +85,41 @@ namespace systems {
 		const auto name_hash = this->murmur2( class_name );
 		const auto idx = this->bucket_index( name_hash );
 
-		const auto bucket_addr = this->m_client_scope + 0x5c0 + static_cast< std::size_t >( idx ) * 24;
+		const auto bucket_addr = this->m_client_scope + g::offsets.runtime.schema_system.scope_buckets + static_cast< std::size_t >( idx ) * g::offsets.runtime.schema_system.bucket_stride;
 		const auto first = g::memory.read<std::uintptr_t>( bucket_addr );
 		auto element = first;
 
 		while ( element )
 		{
-			const auto key = g::memory.read<std::uint32_t>( element );
+			const auto key = g::memory.read<std::uint32_t>( element + g::offsets.runtime.schema_system.element_key );
 			if ( key == name_hash )
 			{
-				const auto data = g::memory.read<std::uintptr_t>( element + 16 );
+				const auto data = g::memory.read<std::uintptr_t>( element + g::offsets.runtime.schema_system.element_data );
 				if ( data )
 				{
 					return data;
 				}
 			}
 
-			element = g::memory.read<std::uintptr_t>( element + 8 );
+			element = g::memory.read<std::uintptr_t>( element + g::offsets.runtime.schema_system.element_next );
 		}
 
-		const auto first_uncommitted = g::memory.read<std::uintptr_t>( bucket_addr + 16 );
+		const auto first_uncommitted = g::memory.read<std::uintptr_t>( bucket_addr + g::offsets.runtime.schema_system.bucket_first_uncommitted );
 		element = first_uncommitted;
 
 		while ( element && element != first )
 		{
-			const auto key = g::memory.read<std::uint32_t>( element );
+			const auto key = g::memory.read<std::uint32_t>( element + g::offsets.runtime.schema_system.element_key );
 			if ( key == name_hash )
 			{
-				const auto data = g::memory.read<std::uintptr_t>( element + 16 );
+				const auto data = g::memory.read<std::uintptr_t>( element + g::offsets.runtime.schema_system.element_data );
 				if ( data )
 				{
 					return data;
 				}
 			}
 
-			element = g::memory.read<std::uintptr_t>( element + 8 );
+			element = g::memory.read<std::uintptr_t>( element + g::offsets.runtime.schema_system.element_next );
 		}
 
 		return 0;
