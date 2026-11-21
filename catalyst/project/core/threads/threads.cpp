@@ -17,7 +17,7 @@ namespace threads {
 				systems::g_entities.refresh( );
 				systems::g_collector.run( );
 
-				const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
+				const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.client.global_vars );
 				if ( global_vars )
 				{
 					const auto map_ptr = g::memory.read<std::uintptr_t>( global_vars + g::offsets.runtime.global_vars.map_name );
