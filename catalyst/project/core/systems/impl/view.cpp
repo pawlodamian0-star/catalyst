@@ -4,7 +4,7 @@ namespace systems {
 
 	void view::update( )
 	{
-		this->m_matrix = g::memory.read<math::matrix4x4>( g::offsets.view_matrix );
+		this->m_matrix = g::memory.read<math::matrix4x4>( g::offsets.client.view_matrix );
 
 		static const auto view_render = g::memory.find_vtable_instance( g::modules.client, "CViewRender" );
 		if ( !view_render )
@@ -12,12 +12,12 @@ namespace systems {
 			return;
 		}
 
-		const auto view = view_render + 0x10;
+		const auto view = view_render + g::offsets.runtime.view.camera;
 		if ( view )
 		{
-			this->m_origin = g::memory.read<math::vector3>( view + 0x0 );
-			this->m_angles = g::memory.read<math::vector3>( view + 0xc );
-			this->m_fov = g::memory.read<float>( view + 0x18 );
+			this->m_origin = g::memory.read<math::vector3>( view + g::offsets.runtime.view.origin );
+			this->m_angles = g::memory.read<math::vector3>( view + g::offsets.runtime.view.angles );
+			this->m_fov = g::memory.read<float>( view + g::offsets.runtime.view.fov );
 		}
 		else
 		{

@@ -10,13 +10,13 @@ namespace features::esp {
 			return;
 		}
 
-		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
+		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.client.global_vars );
 		if ( !global_vars )
 		{
 			return;
 		}
 
-		const auto current_time = g::memory.read<float>( global_vars + 0x30 );
+		const auto current_time = g::memory.read<float>( global_vars + g::offsets.runtime.global_vars.current_time );
 
 		for ( const auto& player : systems::g_collector.players( ) )
 		{

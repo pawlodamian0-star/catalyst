@@ -6,7 +6,7 @@ namespace systems {
     {
         set result{};
 
-        const auto model_handle = g::memory.read<std::uintptr_t>( game_scene_node + 0x200 );
+        const auto model_handle = g::memory.read<std::uintptr_t>( game_scene_node + g::offsets.runtime.hitbox.model_handle );
         if ( !model_handle )
         {
             return result;
@@ -18,34 +18,34 @@ namespace systems {
             return result;
         }
 
-        const auto render_meshes = g::memory.read<std::uintptr_t>( g::memory.read<std::uintptr_t>( cmodel + 0x78 ) );
+        const auto render_meshes = g::memory.read<std::uintptr_t>( g::memory.read<std::uintptr_t>( cmodel + g::offsets.runtime.hitbox.model_render_meshes ) );
         if ( !render_meshes )
         {
             return result;
         }
 
-        const auto hitbox_data = g::memory.read<std::uintptr_t>( render_meshes + 0x168 );
+        const auto hitbox_data = g::memory.read<std::uintptr_t>( render_meshes + g::offsets.runtime.hitbox.render_mesh_hitbox_data );
         if ( !hitbox_data )
         {
             return result;
         }
 
-        const auto count = g::memory.read<int>( hitbox_data + 0x28 );
+        const auto count = g::memory.read<int>( hitbox_data + g::offsets.runtime.hitbox.hitbox_count );
         if ( count <= 0 || count > 20 )
         {
             return result;
         }
 
-        const auto array_ptr = g::memory.read<std::uintptr_t>( hitbox_data + 0x30 );
+        const auto array_ptr = g::memory.read<std::uintptr_t>( hitbox_data + g::offsets.runtime.hitbox.hitbox_array );
         if ( !array_ptr )
         {
             return result;
         }
 
-        const auto remap_count = g::memory.read<int>( cmodel + 0x220 );
-        const auto remap_table = g::memory.read<std::uintptr_t>( cmodel + 0x228 );
-        const auto mesh_a = g::memory.read<std::uintptr_t>( cmodel + 0x240 );
-        const auto mesh_b = g::memory.read<std::uintptr_t>( cmodel + 0x2F0 );
+        const auto remap_count = g::memory.read<int>( cmodel + g::offsets.runtime.hitbox.remap_count );
+        const auto remap_table = g::memory.read<std::uintptr_t>( cmodel + g::offsets.runtime.hitbox.remap_table );
+        const auto mesh_a = g::memory.read<std::uintptr_t>( cmodel + g::offsets.runtime.hitbox.mesh_a );
+        const auto mesh_b = g::memory.read<std::uintptr_t>( cmodel + g::offsets.runtime.hitbox.mesh_b );
         const auto has_remap = remap_table && mesh_a && mesh_b && remap_count > 0;
 
         std::array<std::int16_t, 512> remap_buf{};
@@ -64,7 +64,7 @@ namespace systems {
             ofs_b = g::memory.read<std::uint16_t>( mesh_b );
         }
 
-        constexpr auto k_hitbox_stride{ 0x70 };
+        constexpr auto k_hitbox_stride{ offsets::hitbox_stride };
 
         std::array<std::byte, 20 * k_hitbox_stride> buffer{};
         if ( !g::memory.read( array_ptr, buffer.data( ), static_cast< std::size_t >( count ) * k_hitbox_stride ) )
@@ -79,7 +79,7 @@ namespace systems {
 
             if ( has_remap )
             {
-                const auto hb_idx = *reinterpret_cast< const std::uint16_t* >( buffer.data( ) + offset + 0x48 );
+                const auto hb_idx = *reinterpret_cast< const std::uint16_t* >( buffer.data( ) + offset + g::offsets.runtime.hitbox.bone_index );
                 const auto slot = static_cast< std::size_t >( hb_idx + ofs_a + ofs_b );
 
                 if ( slot < static_cast< std::size_t >( remap_to_read ) )
@@ -93,7 +93,7 @@ namespace systems {
                 continue;
             }
 
-            const auto radius = *reinterpret_cast< const float* >( buffer.data( ) + offset + 0x30 );
+            const auto radius = *reinterpret_cast< const float* >( buffer.data( ) + offset + g::offsets.runtime.hitbox.radius );
             if ( radius < 0.0f || radius > 100.0f )
             {
                 continue;
@@ -102,8 +102,8 @@ namespace systems {
             auto& hb = result.entries[ result.count++ ];
             hb.index = i;
             hb.bone = bone;
-            hb.mins = *reinterpret_cast< const math::vector3* >( buffer.data( ) + offset + 0x18 );
-            hb.maxs = *reinterpret_cast< const math::vector3* >( buffer.data( ) + offset + 0x24 );
+            hb.mins = *reinterpret_cast< const math::vector3* >( buffer.data( ) + offset + g::offsets.runtime.hitbox.mins );
+            hb.maxs = *reinterpret_cast< const math::vector3* >( buffer.data( ) + offset + g::offsets.runtime.hitbox.maxs );
             hb.radius = radius;
         }
 

@@ -4,7 +4,7 @@ namespace systems {
 
 	void local::update( )
 	{
-		const auto local_controller = g::memory.read<std::uintptr_t>( g::offsets.local_player_controller );
+		const auto local_controller = g::memory.read<std::uintptr_t>( g::offsets.client.local_player_controller );
 		if ( !local_controller )
 		{
 			this->reset( );
