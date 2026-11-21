@@ -64,7 +64,7 @@ namespace systems {
             ofs_b = g::memory.read<std::uint16_t>( mesh_b );
         }
 
-        constexpr auto k_hitbox_stride{ 0x70 };
+        constexpr auto k_hitbox_stride{ offsets::hitbox_stride };
 
         std::array<std::byte, 20 * k_hitbox_stride> buffer{};
         if ( !g::memory.read( array_ptr, buffer.data( ), static_cast< std::size_t >( count ) * k_hitbox_stride ) )
