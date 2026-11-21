@@ -76,6 +76,30 @@ public:
 		} game_rules;
 	} schema;
 
+	// Runtime object/layout offsets used by the project. These are not module RVAs.
+	struct runtime_t {
+		struct global_vars_t { std::uintptr_t current_time{0x30}, map_name{0x188}; } global_vars;
+		struct entity_list_t {
+			std::uintptr_t chunk_table{0x10}, chunk_pointer_stride{8}, entry_stride{112};
+			std::uintptr_t handle_index_mask{0x1ff}, handle_chunk_mask{0x7fff}, chunk_shift{9};
+		} entity_list;
+		struct entity_identity_t { std::uintptr_t identity{0x10}, class_info{0x8}, name_container{0x8}, schema_name{0x8}; } entity_identity;
+		struct schema_system_t {
+			std::uintptr_t field_count{0x24}, fields{0x30}, field_stride{0x20}, field_offset{0x10};
+			std::uintptr_t scope_count{0x190}, scope_data{0x198}, scope_name{0x8};
+			std::uintptr_t scope_buckets{0x5c0}, bucket_stride{24}, bucket_first_uncommitted{16};
+			std::uintptr_t element_key{0}, element_next{8}, element_data{16};
+		} schema_system;
+		struct hitbox_t {
+			std::uintptr_t model_handle{0x200}, model_render_meshes{0x78}, render_mesh_hitbox_data{0x168};
+			std::uintptr_t hitbox_count{0x28}, hitbox_array{0x30}, remap_count{0x220}, remap_table{0x228};
+			std::uintptr_t mesh_a{0x240}, mesh_b{0x2f0}, stride{0x70}, bone_index{0x48};
+			std::uintptr_t radius{0x30}, mins{0x18}, maxs{0x24};
+		} hitbox;
+		struct view_t { std::uintptr_t camera{0x10}, origin{0}, angles{0xc}, fov{0x18}; } view;
+		std::uintptr_t subclass_vdata{0x8}, model_state_bone_cache{0x80};
+	} runtime;
+
 	// Interface offsets, grouped by owning module.
 	struct interfaces_t {
 		struct animationsystem_t { std::uintptr_t utils{0x83F6D8}, system{0x8375F8}; } animationsystem;
