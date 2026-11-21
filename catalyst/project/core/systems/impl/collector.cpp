@@ -206,7 +206,7 @@ namespace systems {
 		std::vector<projectile> fresh{};
 		fresh.reserve( 32 );
 
-		const auto current_time = g::memory.read<float>( g::memory.read<std::uintptr_t>( g::offsets.global_vars ) + g::offsets.runtime.global_vars.current_time );
+		const auto current_time = g::memory.read<float>( g::memory.read<std::uintptr_t>( g::offsets.client.global_vars ) + g::offsets.runtime.global_vars.current_time );
 
 		for ( const auto& entry : raw )
 		{
