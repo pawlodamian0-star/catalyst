@@ -96,7 +96,7 @@ namespace systems {
 
 	std::uintptr_t entities::get_entity_list( ) const
 	{
-		return g::memory.read<std::uintptr_t>( g::offsets.entity_list );
+		return g::memory.read<std::uintptr_t>( g::offsets.client.entity_list );
 	}
 
 	std::uintptr_t entities::get_by_index( std::uintptr_t entity_list, int index ) const
@@ -109,7 +109,7 @@ namespace systems {
 			return 0;
 		}
 
-		return g::memory.read<std::uintptr_t>( list_entry + ( static_cast< std::uintptr_t >( index & g::offsets.runtime.entity_list.handle_index_mask ) * g::offsets.runtime.entity_list.entry_stride );
+		return g::memory.read<std::uintptr_t>( list_entry + ( static_cast< std::uintptr_t >( index & g::offsets.runtime.entity_list.handle_index_mask ) * g::offsets.runtime.entity_list.entry_stride ) );
 	}
 
 	std::uint32_t entities::get_schema_hash( std::uintptr_t entity ) const
