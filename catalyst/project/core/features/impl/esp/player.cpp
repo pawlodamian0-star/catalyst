@@ -10,7 +10,7 @@ namespace features::esp {
 			return;
 		}
 
-		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
+		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.client.global_vars );
 		if ( !global_vars )
 		{
 			return;
