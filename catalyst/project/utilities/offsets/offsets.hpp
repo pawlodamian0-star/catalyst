@@ -5,6 +5,10 @@ class offsets
 public:
 	bool initialize( );
 
+	// Backward-compatible aliases used by the existing project code.
+	std::uintptr_t csgo_input{ 0 }, entity_list{ 0 }, local_player_controller{ 0 };
+	std::uintptr_t global_vars{ 0 }, view_matrix{ 0 };
+
 	// Module-relative global offsets.
 	struct client_t {
 		std::uintptr_t csgo_input{}, entity_list{}, game_entity_system{}, game_entity_system_highest_entity_index{};
