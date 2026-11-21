@@ -103,22 +103,28 @@ public:
 			std::uintptr_t debug_draw{0x13FF70}, model_info{0x13FFB0}, game_system{0x13FFF0}, host_utils{0x14F900};
 			std::uintptr_t prediction_diff{0x140100}, save_restore{0x140230}, shared_memory{0x140260}, source2_host{0x1402D0};
 		} host;
+		struct imemanager_t { std::uintptr_t ime_manager{0x37AA0}; } imemanager;
 		struct inputsystem_t { std::uintptr_t input_stack{0x44E90}, input_system{0x46BC0}; } inputsystem;
+		struct localize_t { std::uintptr_t localize{0x59120}; } localize;
 		struct matchmaking_t { std::uintptr_t game_types{0x1AEFC0}, match_framework{0x1B7080}; } matchmaking;
 		struct materialsystem2_t {
 			std::uintptr_t font_manager{0x1638E0}, material_utils{0x14BD30}, post_processing{0x14BC60};
 			std::uintptr_t text_layout{0x14BCC0}, material_system{0x163530};
 		} materialsystem2;
+		struct meshsystem_t { std::uintptr_t mesh_system{0x180AB0}; } meshsystem;
+		struct navsystem_t { std::uintptr_t nav_system{0x12C000}; } navsystem;
 		struct networksystem_t {
 			std::uintptr_t flattened_serializers{0x272A30}, network_messages{0x29EE00};
 			std::uintptr_t network_system{0x28C450}, serialized_entities{0x28C530};
 		} networksystem;
 		struct panorama_t { std::uintptr_t ui_engine{0x5895F0}; } panorama;
+		struct panorama_text_t { std::uintptr_t text_services{0x2BA9D0}; } panorama_text_pango;
 		struct panoramaclient_t { std::uintptr_t ui_client{0x270710}; } panoramaclient;
 		struct particles_t { std::uintptr_t manager{0x65AEE0}; } particles;
 		struct pulse_t { std::uintptr_t system{0x238120}; } pulse;
 		struct rendersystem_t { std::uintptr_t device_manager{0x4342F0}, render_utils{0x434BD0}, device_backdoor{0x434390}; } rendersystem;
 		struct resourcesystem_t { std::uintptr_t resource_system{0x89230}; } resourcesystem;
+		struct scenefilecache_t { std::uintptr_t response_rules_cache{0x11D350}, scene_file_cache{0x11D478}; } scenefilecache;
 		struct scenesystem_t { std::uintptr_t pipelines{0x675A00}, scene_system{0x91FB20}, scene_utils{0x676760}; } scenesystem;
 		struct schemasystem_t { std::uintptr_t schema_system{0x76710}; } schemasystem;
 		struct server_t {
@@ -128,6 +134,8 @@ public:
 			std::uintptr_t custom_nav{0x1D904A8};
 		} server;
 		struct soundsystem_t { std::uintptr_t bug_bug{0x532C90}, op_system{0x532B70}, op_system_edit{0x532A80}, sound_system{0x532470}, vmix_edit{0x5941BBF}; } soundsystem;
+		struct steamaudio_t { std::uintptr_t steam_audio{0x35C1A0}; } steamaudio;
+		struct v8system_t { std::uintptr_t source2_v8{0x34790}; } v8system;
 		struct tier0_t { std::uintptr_t test_script{0x3A1960}, cvar{0x3AC670}, process_utils{0x3A1820}, string_tokens{0x3D3300}; } tier0;
 		struct vphysics2_t { std::uintptr_t physics{0x460E60}; } vphysics2;
 		struct vscript_t { std::uintptr_t manager{0x13E430}; } vscript;
