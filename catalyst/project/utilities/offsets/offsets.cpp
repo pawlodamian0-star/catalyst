@@ -63,6 +63,13 @@ bool offsets::initialize( )
 	this->buttons.use = client_base + 0x2225D80;
 	this->buttons.zoom = client_base + 0x2569CC0;
 
+	// Keep the original flat members synchronized for existing call sites.
+	this->csgo_input = this->client.csgo_input;
+	this->entity_list = this->client.entity_list;
+	this->local_player_controller = this->client.local_player_controller;
+	this->global_vars = this->client.global_vars;
+	this->view_matrix = this->client.view_matrix;
+
 	// Interface table entries remain module-relative RVAs; add the owning module
 	// base at the call site when resolving an interface entry.
 	return this->client.csgo_input && this->client.entity_list &&
