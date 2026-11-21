@@ -16,7 +16,7 @@ namespace features::esp {
 			return;
 		}
 
-		const auto current_time = g::memory.read<float>( global_vars + 0x30 );
+		const auto current_time = g::memory.read<float>( global_vars + g::offsets.runtime.global_vars.current_time );
 
 		for ( const auto& player : systems::g_collector.players( ) )
 		{
