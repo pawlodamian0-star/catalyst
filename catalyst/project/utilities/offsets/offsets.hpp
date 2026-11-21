@@ -4,6 +4,7 @@ class offsets
 {
 public:
 	bool initialize( );
+	static constexpr std::uintptr_t hitbox_stride{ 0x70 };
 
 	// Absolute addresses resolved from module-relative RVAs in initialize().
 	// The five values below are the only game-build RVAs currently confirmed
@@ -53,7 +54,7 @@ public:
 		struct hitbox_t {
 			std::uintptr_t model_handle{0x200}, model_render_meshes{0x78}, render_mesh_hitbox_data{0x168};
 			std::uintptr_t hitbox_count{0x28}, hitbox_array{0x30}, remap_count{0x220}, remap_table{0x228};
-			std::uintptr_t mesh_a{0x240}, mesh_b{0x2f0}, stride{0x70}, bone_index{0x48};
+			std::uintptr_t mesh_a{0x240}, mesh_b{0x2f0}, bone_index{0x48};
 			std::uintptr_t radius{0x30}, mins{0x18}, maxs{0x24};
 		} hitbox;
 		struct view_t { std::uintptr_t camera{0x10}, origin{0}, angles{0xc}, fov{0x18}; } view;
