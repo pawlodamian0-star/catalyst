@@ -434,7 +434,7 @@ namespace features::combat {
 		ctx.recoil_index = g::memory.read<float>( ctx.weapon + SCHEMA( "C_CSWeaponBase", "m_flRecoilIndex"_hash ) );
 		ctx.is_reloading = g::memory.read<bool>( ctx.weapon + SCHEMA( "C_CSWeaponBase", "m_bInReload"_hash ) );
 
-		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.global_vars );
+		const auto global_vars = g::memory.read<std::uintptr_t>( g::offsets.client.global_vars );
 		if ( global_vars )
 		{
 			ctx.current_time = g::memory.read<float>( global_vars + g::offsets.runtime.global_vars.current_time );
